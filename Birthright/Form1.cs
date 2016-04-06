@@ -11,7 +11,7 @@ using System.Windows.Forms;
 namespace Birthright
 {
     public partial class Form1 : Form
-    {
+    {//
         Database myDatabase = new Database();
         public Form1()
         {
