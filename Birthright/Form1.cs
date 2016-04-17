@@ -32,8 +32,40 @@ namespace Birthright
             {
                 MessageBox.Show(ex.Message);
             }
+        }//search for text as typed in 
+        public void SearchBoxTyping(object sender, EventArgs e)
+        {
+            TextBox fakeTextBox = sender as TextBox;
+            dgvDataViewer.DataSource = null;
+            try
+            {
+                switch (fakeTextBox.Name)
+                {
+                    case "txtFindProvince":
+
+                        dgvDataViewer.DataSource = myDatabase.SearchForItem("Province", txtFindProvince.Text);
+                        dgvDataViewer.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
+
+                        break;
+                    //case "txtFindCustomer":
+                    //    dgvCustomers.DataSource = myDatabase.SearchForItem("Customer", txtFindCustomer.Text);
+                    //    dgvCustomers.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
+                    //    break;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
+        private void btnTest_Click(object sender, EventArgs e)
+        {
+            GameInfo newGameInfo=new GameInfo();
+            newGameInfo.PopulateTerrainDictionary();
+            lbxTest.Items.Add("Plains " + newGameInfo.terrainTypeDictionary["Plains"][0]+" "+ newGameInfo.terrainTypeDictionary["Plains"][1] + " " + newGameInfo.terrainTypeDictionary["Plains"][2]);
+            lbxTest.Items.Add("Plains " + newGameInfo.Terrain["Plains"].MaxPop+" "+newGameInfo.Terrain["Plains"].MoveCost+" " + newGameInfo.Terrain["Plains"].SourcePotential);
+        }
     }
 }
 /*//load views on tab click
@@ -58,32 +90,7 @@ namespace Birthright
             }
         }
 
-        //search for text as typed in --database method?
-        public void SearchBoxTyping(object sender, EventArgs e)
-        {
-            TextBox fakeTextBox = sender as TextBox;
-            //dgvMovies.DataSource = null;
-            try
-            {
-                switch (fakeTextBox.Name)
-                {
-                    case "txtFindMovie":
-
-                        dgvMovies.DataSource = myDatabase.SearchForItem("Movies", txtFindMovie.Text);
-                        dgvMovies.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
-
-                        break;
-                    case "txtFindCustomer":
-                        dgvCustomers.DataSource = myDatabase.SearchForItem("Customer", txtFindCustomer.Text);
-                        dgvCustomers.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
-                        break;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
+        
 
         public void RentalSelect_Clicked(object sender, EventArgs e)
         {
