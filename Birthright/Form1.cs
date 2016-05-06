@@ -7,44 +7,172 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Diagnostics;
+
 
 namespace Birthright
 {
     public partial class Form1 : Form
-    {//ddd
+    {
         Database myDatabase = new Database();
         public Form1()
         {
             InitializeComponent();
             LoadDatabase();
+            //ccbProvinceSecondaryTerrain.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.ccb_ItemCheck);
+            SetUpComboBoxes();
         }
+
+
+        private void SetUpComboBoxes()
+        {
+            int count = 0;
+            foreach (KeyValuePair<string, GameInfo.TerrainType> terrainDictionaryElement in GameInfo.Terrain)
+            {
+                string terrainName = terrainDictionaryElement.Value.TerrainName;
+                CCBoxItem item = new CCBoxItem(terrainName,count);
+                cbxProvinceTerrain.Items.Add(terrainName);
+                ccbProvinceSecondaryTerrain.Items.Add(item);
+                count++;
+
+            }
+            foreach (string holdingType in GameInfo.HoldingTypes)
+            {
+                cbxHoldingType.Items.Add(holdingType);
+            }
+
+
+            // If more then 5 items, add a scroll bar to the dropdown.
+            ccbProvinceSecondaryTerrain.MaxDropDownItems = 5;
+            // Make the "Name" property the one to display, rather than the ToString() representation.
+            ccbProvinceSecondaryTerrain.DisplayMember = "Name";
+            ccbProvinceSecondaryTerrain.ValueSeparator = ", ";
+            // Check the first 2 items.
+            //ccbProvinceSecondaryTerrain.SetItemChecked(0, true);
+            //ccbProvinceSecondaryTerrain.SetItemChecked(1, true);
+            //ccb.SetItemCheckState(1, CheckState.Indeterminate);
+        }
+
         public void LoadDatabase()
         {
-            dgvDataViewer.DataSource = null;
+            dgvMain.DataSource = null;
 
             try
             {
-                dgvDataViewer.DataSource = myDatabase.FillDatatable("Province");
-                dgvDataViewer.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
+                dgvMain.DataSource = myDatabase.FillDatatable("CombinedView");
+                dgvMain.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
+                dgvRulers.DataSource = myDatabase.FillDatatable("Ruler");
+                dgvRulers.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
+                dgvRealms.DataSource = myDatabase.FillDatatable("Realm");
+                dgvRealms.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
+                dgvProvinces.DataSource = myDatabase.FillDatatable("Province");
+                dgvProvinces.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
+                dgvHoldings.DataSource = myDatabase.FillDatatable("Holding");
+                dgvHoldings.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
 
             } 
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
-        }//search for text as typed in 
+            
+        }
+
+        private void DGV_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            DataGridView fakeDataGridView = sender as DataGridView;
+            //these are the cell clicks for the values in the row that you click on
+            try
+            {
+                if (sender == dgvRulers)
+                {
+
+                    //if you are clicking on a row and not outside it
+                    if (e.RowIndex >= 0)
+                    {
+                        lblRulerIDText.Text = fakeDataGridView.Rows[e.RowIndex].Cells[0].Value.ToString();
+                        txtRulerName.Text = fakeDataGridView.Rows[e.RowIndex].Cells[1].Value.ToString();
+                        txtRulerAbbreviation.Text = fakeDataGridView.Rows[e.RowIndex].Cells[2].Value.ToString();
+                        
+
+                    }
+                }
+                else if (sender == dgvRealms)
+                {
+                    if (e.RowIndex >= 0)
+                    {
+                        lblRealmIDText.Text = fakeDataGridView.Rows[e.RowIndex].Cells[0].Value.ToString();
+                        txtRealmName.Text = fakeDataGridView.Rows[e.RowIndex].Cells[1].Value.ToString();
+                        txtRealmOwner.Text = fakeDataGridView.Rows[e.RowIndex].Cells[2].Value.ToString();
+                        
+
+                    }
+                }
+                else if (sender == dgvProvinces)
+                {
+                    if (e.RowIndex >= 0)
+                    {
+                        lblProvinceIDText.Text = fakeDataGridView.Rows[e.RowIndex].Cells[0].Value.ToString();
+                        txtProvinceName.Text = fakeDataGridView.Rows[e.RowIndex].Cells[1].Value.ToString();
+                        txtProvinceSize.Text = fakeDataGridView.Rows[e.RowIndex].Cells[2].Value.ToString();
+                        cbxProvinceTerrain.Text = fakeDataGridView.Rows[e.RowIndex].Cells[3].Value.ToString();
+                        SetCheckedComboBoxCheckedItems(fakeDataGridView.Rows[e.RowIndex].Cells[4].Value.ToString());//TODO turn field info into checked list items.
+                        txtProvinceOwner.Text = fakeDataGridView.Rows[e.RowIndex].Cells[5].Value.ToString();
+                        txtProvinceLoyalty.Text = fakeDataGridView.Rows[e.RowIndex].Cells[6].Value.ToString();
+                        cbxProvinceRoad.Checked= Convert.ToBoolean( fakeDataGridView.Rows[e.RowIndex].Cells[7].Value);
+                    }
+                }
+                else if (sender == dgvHoldings)
+                {
+                    if (e.RowIndex >= 0)
+                    {
+                        lblHoldingIDText.Text = fakeDataGridView.Rows[e.RowIndex].Cells[0].Value.ToString();
+                        cbxHoldingType.Text = fakeDataGridView.Rows[e.RowIndex].Cells[1].Value.ToString();
+                        txtHoldingSize.Text = fakeDataGridView.Rows[e.RowIndex].Cells[2].Value.ToString();
+                        txtHoldingOwner.Text = fakeDataGridView.Rows[e.RowIndex].Cells[3].Value.ToString();
+                        
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        public void SetCheckedComboBoxCheckedItems(string items)
+        {
+            List<string> things = items.Split(',').Select(p => p.Trim()).ToList();
+            
+            for (int i = 0; i < ccbProvinceSecondaryTerrain.Items.Count; i++)
+            {
+               
+            
+                if (things.Contains(ccbProvinceSecondaryTerrain.Items[i].ToString()))
+                {
+                    ccbProvinceSecondaryTerrain.SetItemCheckState(ccbProvinceSecondaryTerrain.Items.IndexOf(ccbProvinceSecondaryTerrain.Items[i]),CheckState.Checked) ;
+                }
+                else { ccbProvinceSecondaryTerrain.SetItemCheckState(ccbProvinceSecondaryTerrain.Items.IndexOf(ccbProvinceSecondaryTerrain.Items[i]), CheckState.Unchecked); }
+            }
+
+        }
+
+
+
+        //search for text as typed in 
         public void SearchBoxTyping(object sender, EventArgs e)
         {
             TextBox fakeTextBox = sender as TextBox;
-            dgvDataViewer.DataSource = null;
+            dgvMain.DataSource = null;
             try
             {
                 switch (fakeTextBox.Name)
                 {
                     case "txtFindProvince":
 
-                        dgvDataViewer.DataSource = myDatabase.SearchForItem("Province", txtFindProvince.Text);
-                        dgvDataViewer.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
+                        dgvMain.DataSource = myDatabase.SearchForItem("Province", txtFindProvince.Text);
+                        dgvMain.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
 
                         break;
                     //case "txtFindCustomer":
@@ -58,17 +186,52 @@ namespace Birthright
                 MessageBox.Show(ex.Message);
             }
         }
+        private void btnAdminButton_Click(object sender, EventArgs e)
+        {
+            Button fakeButton = sender as Button;
+            /*
+              ;cbxHoldingType;txtHoldingSize;txtHoldingOwner;lblHoldingIDText;
+     
+       */
 
+
+            Dictionary<string, string> dictData = new Dictionary<string, string>();
+
+            dictData.Add("RulerID", lblRulerIDText.Text);
+            dictData.Add("RulerName", txtRulerName.Text);
+            dictData.Add("RulerAbbreviation", txtRulerAbbreviation.Text);
+            dictData.Add("RealmID", lblRealmIDText.Text);
+            dictData.Add("RealmName", txtRealmName.Text);
+            dictData.Add("RealmOwner", txtRealmOwner.Text);
+            dictData.Add("ProvinceID", lblProvinceIDText.Text);
+            dictData.Add("ProvinceName", txtProvinceName.Text);
+            dictData.Add("ProvinceSize", txtProvinceSize.Text);
+            dictData.Add("ProvinceTerrain", cbxProvinceTerrain.Text);//TODO convert terrain name to database format (High Mountain becomes MountainHigh)
+            dictData.Add("ProvinceSecondaryTerrain", ccbProvinceSecondaryTerrain.Text);
+            dictData.Add("ProvinceOwner", txtProvinceOwner.Text);
+            dictData.Add("ProvinceLoyalty", txtProvinceLoyalty.Text);
+            dictData.Add("ProvinceRoad", cbxProvinceRoad.Checked.ToString());
+            dictData.Add("HoldingID", lblHoldingIDText.Text);
+            dictData.Add("HoldingType", cbxHoldingType.Text);
+            dictData.Add("HoldingSize", txtHoldingSize.Text);
+            dictData.Add("HoldingOwner", txtHoldingOwner.Text);
+
+
+
+            string buttonName = fakeButton.Text;
+
+            myDatabase.AdminTools(dictData, buttonName);
+            LoadDatabase();
+        }
         private void btnTest_Click(object sender, EventArgs e)
         {
-            GameInfo newGameInfo=new GameInfo();
-            newGameInfo.PopulateTerrainDictionary();
-            lbxTest.Items.Add("Plains " + newGameInfo.terrainTypeDictionary["Plains"][0]+" "+ newGameInfo.terrainTypeDictionary["Plains"][1] + " " + newGameInfo.terrainTypeDictionary["Plains"][2]);
-            lbxTest.Items.Add("Plains " + newGameInfo.Terrain["Plains"].MaxPop+" "+newGameInfo.Terrain["Plains"].MoveCost+" " + newGameInfo.Terrain["Plains"].SourcePotential);
+           // GameInfo newGameInfo=new GameInfo();
+         
+            lbxTest.Items.Add("Plains " + GameInfo.Terrain["Plains"].MaxPop+" "+GameInfo.Terrain["Plains"].MoveCost+" " + GameInfo.Terrain["Plains"].SourcePotential);
         }
     }
 }
-/*//load views on tab click
+/*// load views on tab click
         private void TabClick(object sender, EventArgs e)
         {
         }

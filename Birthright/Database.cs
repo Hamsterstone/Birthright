@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Birthright
 {
@@ -43,9 +44,122 @@ namespace Birthright
             return myDataTable;
 
         }
-        //Update holding/province/etc
-        //add new province/holding/ruler
-        //create holding
+        //TODO Set up admin controls in database manager
+        public void AdminTools(Dictionary<string, string> data, string action)
+        {
+            try
+            {
+                SqlCommand myCommand = connection.CreateCommand();
+                myCommand.Connection = connection;
+                switch (action)
+                {
+                    case "Add New Ruler":
+                        myCommand.CommandText = "AdminAddRuler";
+                        myCommand.Parameters.AddWithValue("@RulerNameIn", data["RulerName"]);
+                        myCommand.Parameters.AddWithValue("@RulerAbbreviationIn", data["RulerAbbreviation"]);
+                        break;
+                    case "Update Ruler":
+                        myCommand.CommandText = "AdminUpdateRuler";
+                        myCommand.Parameters.AddWithValue("@RulerIDIn", data["RulerID"]);
+                        myCommand.Parameters.AddWithValue("@RulerNameIn", data["RulerName"]);
+                        myCommand.Parameters.AddWithValue("@RulerAbbreviationIn", data["RulerAbbreviation"]);
+                       break;
+                    case "Delete Ruler":
+                        myCommand.CommandText = "AdminDelete";
+                        myCommand.Parameters.AddWithValue("@TableNameIn", "Ruler");
+                        myCommand.Parameters.AddWithValue("@ColumnNameIn", "RulerID");
+                        myCommand.Parameters.AddWithValue("@IDNumber", data["RulerID"]);
+                        break;
+                    case "Add New Realm":
+                        myCommand.CommandText = "AdminAddRealm";
+                        myCommand.Parameters.AddWithValue("@RealmNameIn", data["RealmName"]);
+                        myCommand.Parameters.AddWithValue("@RealmOwnerIn", data["RealmOwner"]);
+
+                        break;
+                    case "Update Realm":
+                        myCommand.CommandText = "AdminUpdateRealm";
+                        myCommand.Parameters.AddWithValue("@RealmIDIn", data["RealmID"]);
+                        myCommand.Parameters.AddWithValue("@RealmNameIn", data["RealmName"]);
+                        myCommand.Parameters.AddWithValue("@RealmOwnerIn", data["RealmOwner"]);
+
+                        break;
+                    case "Delete Realm":
+                        myCommand.CommandText = "AdminDelete";
+                        myCommand.Parameters.AddWithValue("@TableNameIn", "Realm");
+                        myCommand.Parameters.AddWithValue("@ColumnNameIn", "RealmID");
+                        myCommand.Parameters.AddWithValue("@IDNumber", data["RealmID"]);
+                        break;
+                    case "Add New Province":
+                        myCommand.CommandText = "AdminAddProvince";
+                        myCommand.Parameters.AddWithValue("@ProvinceNameIn", data["ProvinceName"]);
+                        myCommand.Parameters.AddWithValue("@ProvinceSizeIn", data["ProvinceSize"]);
+                        myCommand.Parameters.AddWithValue("@ProvinceTerrainIn", data["ProvinceTerrain"]);
+                        myCommand.Parameters.AddWithValue("@ProvinceSecondaryTerrainIn", data["ProvinceSecondaryTerrain"]);
+                        myCommand.Parameters.AddWithValue("@ProvinceOwnerIn", data["ProvinceOwner"]);
+                        myCommand.Parameters.AddWithValue("@ProvinceLoyaltyIn", data["ProvinceLoyalty"]);
+                        myCommand.Parameters.AddWithValue("@ProvinceRoadIn", data["ProvinceRoad"]);
+                        break;
+                    case "Update Province":
+                        myCommand.CommandText = "";
+                        myCommand.Parameters.AddWithValue("@ProvinceIDIn", data["ProvinceID"]);
+                        myCommand.Parameters.AddWithValue("@ProvinceNameIn", data["ProvinceName"]);
+                        myCommand.Parameters.AddWithValue("@ProvinceSizeIn", data["ProvinceSize"]);
+                        myCommand.Parameters.AddWithValue("@ProvinceTerrainIn", data["ProvinceTerrain"]);
+                        myCommand.Parameters.AddWithValue("@ProvinceSecondaryTerrainIn", data["ProvinceSecondaryTerrain"]);
+                        myCommand.Parameters.AddWithValue("@ProvinceOwnerIn", data["ProvinceOwner"]);
+                        myCommand.Parameters.AddWithValue("@ProvinceLoyaltyIn", data["ProvinceLoyalty"]);
+                        myCommand.Parameters.AddWithValue("@ProvinceRoadIn", data["ProvinceRoad"]);
+                        break;
+                    case "Delete Province":
+                        myCommand.CommandText = "AdminDelete";
+                        myCommand.Parameters.AddWithValue("@TableNameIn", "Province");
+                        myCommand.Parameters.AddWithValue("@ColumnNameIn", "ProvinceID");
+                        myCommand.Parameters.AddWithValue("@IDNumber", data["ProvinceID"]);
+                        break;
+                    case "Add New Holding":
+                        myCommand.CommandText = "";
+                        myCommand.Parameters.AddWithValue("@HoldingTypeIn", data["HoldingType"]);
+                        myCommand.Parameters.AddWithValue("@HoldingSizeIn", data["HoldingSize"]);
+                        myCommand.Parameters.AddWithValue("@HoldingOwnerIn", data["HoldingOwner"]);
+                        break;
+                    case "Update Holding":
+                        myCommand.CommandText = "";
+                        myCommand.Parameters.AddWithValue("@HoldingIDIn", data["HoldingID"]);
+                        myCommand.Parameters.AddWithValue("@HoldingTypeIn", data["HoldingType"]);
+                        myCommand.Parameters.AddWithValue("@HoldingSizeIn", data["HoldingSize"]);
+                        myCommand.Parameters.AddWithValue("@HoldingOwnerIn", data["HoldingOwner"]);
+                        break;
+                    case "Delete Holding":
+                        myCommand.CommandText = "AdminDelete";
+                        myCommand.Parameters.AddWithValue("@TableNameIn", "Holding");
+                        myCommand.Parameters.AddWithValue("@ColumnNameIn", "HoldingID");
+                        myCommand.Parameters.AddWithValue("@IDNumber", data["HoldingID"]);
+                        break;
+                }
+
+
+
+
+
+
+
+                myCommand.CommandType = CommandType.StoredProcedure;
+
+                connection.Open();
+                myCommand.ExecuteNonQuery();
+                connection.Close();
+
+
+            }
+            catch (Exception ex)
+            {
+                connection.Close();
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+
+
         public DataTable SearchForItem(string table, string item)
         {
             DataTable myDataTable = new DataTable();
@@ -305,113 +419,7 @@ namespace Birthright
             }
         }
 
-        public void AdminTools(Dictionary<string, string> data, string action)
-        {
-
-            try
-            {
-                SqlCommand myCommand = connection.CreateCommand();
-                myCommand.Connection = connection;
-                switch (action)
-                {
-                    case "Add Movie":
-                        myCommand.CommandText = "AdminAddMovie";
-                        myCommand.Parameters.AddWithValue("@MovieTitleIn", data["MovieTitle"]);
-                        myCommand.Parameters.AddWithValue("@MovieYearIn", data["MovieYear"]);
-                        myCommand.Parameters.AddWithValue("@MoviePlotIn", data["MoviePlot"]);
-                        myCommand.Parameters.AddWithValue("@MovieRatingIn", data["MovieRating"]);
-                        myCommand.Parameters.AddWithValue("@MovieCopiesIn", data["MovieCopies"]);
-                        myCommand.Parameters.AddWithValue("@MovieGenresIn", data["MovieGenres"]);
-                        break;
-                    case "Update Movie":
-                        myCommand.CommandText = "AdminUpdateMovie";
-                        myCommand.Parameters.AddWithValue("@MovieIDIn", data["MovieID"]);
-                        myCommand.Parameters.AddWithValue("@MovieTitleIn", data["MovieTitle"]);
-                        myCommand.Parameters.AddWithValue("@MovieYearIn", data["MovieYear"]);
-                        myCommand.Parameters.AddWithValue("@MoviePlotIn", data["MoviePlot"]);
-                        myCommand.Parameters.AddWithValue("@MovieRatingIn", data["MovieRating"]);
-                        myCommand.Parameters.AddWithValue("@MovieCopiesIn", data["MovieCopies"]);
-                        myCommand.Parameters.AddWithValue("@MovieGenresIn", data["MovieGenres"]);
-
-                        break;
-                    case "Delete Movie":
-                        myCommand.CommandText = "AdminDelete";
-                        myCommand.Parameters.AddWithValue("@TableNameIn", "Movies");
-                        myCommand.Parameters.AddWithValue("@ColumnNameIn", "MovieID");
-                        myCommand.Parameters.AddWithValue("@IDNumber", data["MovieID"]);
-
-                        break;
-                    case "Add Customer":
-                        myCommand.CommandText = "AdminAddCustomer";
-                        // myCommand.Parameters.AddWithValue("@MCustIDIn", data["CustID"]);
-                        myCommand.Parameters.AddWithValue("@CustFirstnameIn", data["CustFirstname"]);
-                        myCommand.Parameters.AddWithValue("@CustLastnameIn", data["CustLastname"]);
-                        myCommand.Parameters.AddWithValue("@CustAddressIn", data["CustAddress"]);
-                        myCommand.Parameters.AddWithValue("@CustPhoneIn", data["CustPhone"]);
-                        myCommand.Parameters.AddWithValue("@CustDOBIn", data["CustDOB"]);
-                        //myCommand.Parameters.AddWithValue("@MovieGenresIn", data["MovieGenres"]);
-
-                        break;
-                    case "Update Customer":
-                        myCommand.CommandText = "AdminUpdateCustomer";
-                        myCommand.Parameters.AddWithValue("@CustIDIn", data["CustID"]);
-                        myCommand.Parameters.AddWithValue("@CustFirstnameIn", data["CustFirstname"]);
-                        myCommand.Parameters.AddWithValue("@CustLastnameIn", data["CustLastname"]);
-                        myCommand.Parameters.AddWithValue("@CustAddressIn", data["CustAddress"]);
-                        myCommand.Parameters.AddWithValue("@CustPhoneIn", data["CustPhone"]);
-                        myCommand.Parameters.AddWithValue("@CustDOBIn", data["CustDOB"]);
-
-                        break;
-                    case "Delete Customer":
-                        myCommand.CommandText = "AdminDelete";
-                        myCommand.Parameters.AddWithValue("@TableNameIn", "Customer");
-                        myCommand.Parameters.AddWithValue("@ColumnNameIn", "CustID");
-                        myCommand.Parameters.AddWithValue("@IDNumber", data["CustID"]);
-                        break;
-
-                    case "Update Rental":
-                        myCommand.CommandText = "AdminUpdateRental";
-                        myCommand.Parameters.AddWithValue("@RentalIDIn", data["RentalID"]);
-                        myCommand.Parameters.AddWithValue("@RentalDateRentedIn",
-                            DateTime.Parse(data["RentalDateRented"]));
-                        myCommand.Parameters.AddWithValue("@RentalDateReturnedIn",
-                            DateTime.Parse(data["RentalDateReturned"]));
-                        //  myCommand.Parameters.AddWithValue("@MoviePlotIn", data["MoviePlot"]);
-                        //  myCommand.Parameters.AddWithValue("@MovieRatingIn", data["MovieRating"]);
-
-                        break;
-
-                    case "Delete Rental":
-                        myCommand.CommandText = "AdminDelete";
-                        myCommand.Parameters.AddWithValue("@TableNameIn", "RentedMovies");
-                        myCommand.Parameters.AddWithValue("@ColumnNameIn", "RMID");
-                        myCommand.Parameters.AddWithValue("@IDNumber", data["RentalID"]);
-
-                        break;
-                }
-
-
-
-
-
-
-
-                myCommand.CommandType = CommandType.StoredProcedure;
-
-                connection.Open();
-                myCommand.ExecuteNonQuery();
-                connection.Close();
-
-
-            }
-            catch (Exception ex)
-            {
-                connection.Close();
-                MessageBox.Show(ex.Message);
-            }
-
-
-
+        
 
 
 
