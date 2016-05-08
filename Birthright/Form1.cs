@@ -32,6 +32,7 @@ namespace Birthright
                 string terrainName = terrainDictionaryElement.Value.TerrainName;
                 CCBoxItem item = new CCBoxItem(terrainName,count);
                 cbxProvinceTerrain.Items.Add(terrainName);
+                cbxTest.Items.Add(terrainName);
                 ccbProvinceSecondaryTerrain.Items.Add(item);
                 count++;
 
@@ -47,10 +48,7 @@ namespace Birthright
             // Make the "Name" property the one to display, rather than the ToString() representation.
             ccbProvinceSecondaryTerrain.DisplayMember = "Name";
             ccbProvinceSecondaryTerrain.ValueSeparator = ", ";
-            // Check the first 2 items.
-            //ccbProvinceSecondaryTerrain.SetItemChecked(0, true);
-            //ccbProvinceSecondaryTerrain.SetItemChecked(1, true);
-            //ccb.SetItemCheckState(1, CheckState.Indeterminate);
+             
         }
 
         public void LoadDatabase()
@@ -116,7 +114,7 @@ namespace Birthright
                         txtProvinceName.Text = fakeDataGridView.Rows[e.RowIndex].Cells[1].Value.ToString();
                         txtProvinceSize.Text = fakeDataGridView.Rows[e.RowIndex].Cells[2].Value.ToString();
                         cbxProvinceTerrain.Text = fakeDataGridView.Rows[e.RowIndex].Cells[3].Value.ToString();
-                        SetCheckedComboBoxCheckedItems(fakeDataGridView.Rows[e.RowIndex].Cells[4].Value.ToString());//TODO turn field info into checked list items.
+                        SetCheckedComboBoxCheckedItems(fakeDataGridView.Rows[e.RowIndex].Cells[4].Value.ToString());
                         txtProvinceOwner.Text = fakeDataGridView.Rows[e.RowIndex].Cells[5].Value.ToString();
                         txtProvinceLoyalty.Text = fakeDataGridView.Rows[e.RowIndex].Cells[6].Value.ToString();
                         cbxProvinceRoad.Checked= Convert.ToBoolean( fakeDataGridView.Rows[e.RowIndex].Cells[7].Value);
@@ -189,10 +187,7 @@ namespace Birthright
         private void btnAdminButton_Click(object sender, EventArgs e)
         {
             Button fakeButton = sender as Button;
-            /*
-              ;cbxHoldingType;txtHoldingSize;txtHoldingOwner;lblHoldingIDText;
-     
-       */
+            
 
 
             Dictionary<string, string> dictData = new Dictionary<string, string>();
@@ -206,8 +201,8 @@ namespace Birthright
             dictData.Add("ProvinceID", lblProvinceIDText.Text);
             dictData.Add("ProvinceName", txtProvinceName.Text);
             dictData.Add("ProvinceSize", txtProvinceSize.Text);
-            dictData.Add("ProvinceTerrain", cbxProvinceTerrain.Text);//TODO convert terrain name to database format (High Mountain becomes MountainHigh)
-            dictData.Add("ProvinceSecondaryTerrain", ccbProvinceSecondaryTerrain.Text);
+            dictData.Add("ProvinceTerrain", GameInfo.TerrainNameCorrector(cbxProvinceTerrain.Text));
+            dictData.Add("ProvinceSecondaryTerrain", GameInfo.SecondaryTerrainNameCorrector(ccbProvinceSecondaryTerrain.Text));
             dictData.Add("ProvinceOwner", txtProvinceOwner.Text);
             dictData.Add("ProvinceLoyalty", txtProvinceLoyalty.Text);
             dictData.Add("ProvinceRoad", cbxProvinceRoad.Checked.ToString());
@@ -215,19 +210,22 @@ namespace Birthright
             dictData.Add("HoldingType", cbxHoldingType.Text);
             dictData.Add("HoldingSize", txtHoldingSize.Text);
             dictData.Add("HoldingOwner", txtHoldingOwner.Text);
+            dictData.Add("HoldingLocation",txtHoldingLocaton.Text);
 
 
 
             string buttonName = fakeButton.Text;
-
-            myDatabase.AdminTools(dictData, buttonName);
+            //TODO Reactivate for database 
+            // myDatabase.AdminTools(dictData, buttonName);
             LoadDatabase();
         }
         private void btnTest_Click(object sender, EventArgs e)
         {
-           // GameInfo newGameInfo=new GameInfo();
-         
-            lbxTest.Items.Add("Plains " + GameInfo.Terrain["Plains"].MaxPop+" "+GameInfo.Terrain["Plains"].MoveCost+" " + GameInfo.Terrain["Plains"].SourcePotential);
+            // GameInfo newGameInfo=new GameInfo();
+            //lbxTest.Items.Add("Plains " + GameInfo.Terrain["Plains"].MaxPop+" "+GameInfo.Terrain["Plains"].MoveCost+" " + GameInfo.Terrain["Plains"].SourcePotential);
+            //lbxTest.Items.Add(GameInfo.TerrainNameCorrector(ccbProvinceSecondaryTerrain.Text));
+            //lbxTest.Items.Add(GameInfo.SecondaryTerrainNameCorrector(ccbProvinceSecondaryTerrain.Text));
+
         }
     }
 }

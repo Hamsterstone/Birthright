@@ -76,6 +76,7 @@
             this.lblProvinceIDLabel = new System.Windows.Forms.Label();
             this.btnAddProvince = new System.Windows.Forms.Button();
             this.dgvProvinces = new System.Windows.Forms.DataGridView();
+            this.ccbProvinceSecondaryTerrain = new Birthright.CheckedComboBox();
             this.tabHoldings = new System.Windows.Forms.TabPage();
             this.cbxHoldingType = new System.Windows.Forms.ComboBox();
             this.lblHoldingOwner = new System.Windows.Forms.Label();
@@ -89,7 +90,9 @@
             this.lblHoldingIDLabel = new System.Windows.Forms.Label();
             this.btnAddHolding = new System.Windows.Forms.Button();
             this.dgvHoldings = new System.Windows.Forms.DataGridView();
-            this.ccbProvinceSecondaryTerrain = new Birthright.CheckedComboBox();
+            this.cbxTest = new System.Windows.Forms.ComboBox();
+            this.lblHoldingLocation = new System.Windows.Forms.Label();
+            this.txtHoldingLocaton = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMain)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabMain.SuspendLayout();
@@ -545,8 +548,23 @@
             this.dgvProvinces.TabIndex = 20;
             this.dgvProvinces.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DGV_CellContentClick);
             // 
+            // ccbProvinceSecondaryTerrain
+            // 
+            this.ccbProvinceSecondaryTerrain.CheckOnClick = true;
+            this.ccbProvinceSecondaryTerrain.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.ccbProvinceSecondaryTerrain.DropDownHeight = 1;
+            this.ccbProvinceSecondaryTerrain.FormattingEnabled = true;
+            this.ccbProvinceSecondaryTerrain.IntegralHeight = false;
+            this.ccbProvinceSecondaryTerrain.Location = new System.Drawing.Point(452, 403);
+            this.ccbProvinceSecondaryTerrain.Name = "ccbProvinceSecondaryTerrain";
+            this.ccbProvinceSecondaryTerrain.Size = new System.Drawing.Size(204, 21);
+            this.ccbProvinceSecondaryTerrain.TabIndex = 40;
+            this.ccbProvinceSecondaryTerrain.ValueSeparator = ", ";
+            // 
             // tabHoldings
             // 
+            this.tabHoldings.Controls.Add(this.lblHoldingLocation);
+            this.tabHoldings.Controls.Add(this.txtHoldingLocaton);
             this.tabHoldings.Controls.Add(this.cbxHoldingType);
             this.tabHoldings.Controls.Add(this.lblHoldingOwner);
             this.tabHoldings.Controls.Add(this.btnDeleteHolding);
@@ -569,14 +587,14 @@
             // cbxHoldingType
             // 
             this.cbxHoldingType.FormattingEnabled = true;
-            this.cbxHoldingType.Location = new System.Drawing.Point(92, 404);
+            this.cbxHoldingType.Location = new System.Drawing.Point(201, 404);
             this.cbxHoldingType.Name = "cbxHoldingType";
             this.cbxHoldingType.Size = new System.Drawing.Size(100, 21);
             this.cbxHoldingType.TabIndex = 52;
             // 
             // lblHoldingOwner
             // 
-            this.lblHoldingOwner.Location = new System.Drawing.Point(303, 381);
+            this.lblHoldingOwner.Location = new System.Drawing.Point(412, 381);
             this.lblHoldingOwner.Name = "lblHoldingOwner";
             this.lblHoldingOwner.Size = new System.Drawing.Size(100, 23);
             this.lblHoldingOwner.TabIndex = 51;
@@ -602,14 +620,14 @@
             // 
             // txtHoldingSize
             // 
-            this.txtHoldingSize.Location = new System.Drawing.Point(197, 404);
+            this.txtHoldingSize.Location = new System.Drawing.Point(306, 404);
             this.txtHoldingSize.Name = "txtHoldingSize";
             this.txtHoldingSize.Size = new System.Drawing.Size(100, 20);
             this.txtHoldingSize.TabIndex = 48;
             // 
             // lblHoldingSize
             // 
-            this.lblHoldingSize.Location = new System.Drawing.Point(197, 381);
+            this.lblHoldingSize.Location = new System.Drawing.Point(306, 381);
             this.lblHoldingSize.Name = "lblHoldingSize";
             this.lblHoldingSize.Size = new System.Drawing.Size(100, 23);
             this.lblHoldingSize.TabIndex = 47;
@@ -617,14 +635,14 @@
             // 
             // txtHoldingOwner
             // 
-            this.txtHoldingOwner.Location = new System.Drawing.Point(306, 404);
+            this.txtHoldingOwner.Location = new System.Drawing.Point(415, 404);
             this.txtHoldingOwner.Name = "txtHoldingOwner";
             this.txtHoldingOwner.Size = new System.Drawing.Size(100, 20);
             this.txtHoldingOwner.TabIndex = 46;
             // 
             // lblHoldingType
             // 
-            this.lblHoldingType.Location = new System.Drawing.Point(91, 381);
+            this.lblHoldingType.Location = new System.Drawing.Point(200, 381);
             this.lblHoldingType.Name = "lblHoldingType";
             this.lblHoldingType.Size = new System.Drawing.Size(100, 23);
             this.lblHoldingType.TabIndex = 45;
@@ -663,24 +681,35 @@
             this.dgvHoldings.TabIndex = 21;
             this.dgvHoldings.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DGV_CellContentClick);
             // 
-            // ccbProvinceSecondaryTerrain
+            // cbxTest
             // 
-            this.ccbProvinceSecondaryTerrain.CheckOnClick = true;
-            this.ccbProvinceSecondaryTerrain.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
-            this.ccbProvinceSecondaryTerrain.DropDownHeight = 1;
-            this.ccbProvinceSecondaryTerrain.FormattingEnabled = true;
-            this.ccbProvinceSecondaryTerrain.IntegralHeight = false;
-            this.ccbProvinceSecondaryTerrain.Location = new System.Drawing.Point(452, 403);
-            this.ccbProvinceSecondaryTerrain.Name = "ccbProvinceSecondaryTerrain";
-            this.ccbProvinceSecondaryTerrain.Size = new System.Drawing.Size(204, 21);
-            this.ccbProvinceSecondaryTerrain.TabIndex = 40;
-            this.ccbProvinceSecondaryTerrain.ValueSeparator = ", ";
+            this.cbxTest.FormattingEnabled = true;
+            this.cbxTest.Location = new System.Drawing.Point(1087, 169);
+            this.cbxTest.Name = "cbxTest";
+            this.cbxTest.Size = new System.Drawing.Size(121, 21);
+            this.cbxTest.TabIndex = 5;
+            // 
+            // lblHoldingLocation
+            // 
+            this.lblHoldingLocation.Location = new System.Drawing.Point(91, 381);
+            this.lblHoldingLocation.Name = "lblHoldingLocation";
+            this.lblHoldingLocation.Size = new System.Drawing.Size(100, 23);
+            this.lblHoldingLocation.TabIndex = 54;
+            this.lblHoldingLocation.Text = "Holding Location";
+            // 
+            // txtHoldingLocaton
+            // 
+            this.txtHoldingLocaton.Location = new System.Drawing.Point(94, 404);
+            this.txtHoldingLocaton.Name = "txtHoldingLocaton";
+            this.txtHoldingLocaton.Size = new System.Drawing.Size(100, 20);
+            this.txtHoldingLocaton.TabIndex = 53;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1218, 544);
+            this.Controls.Add(this.cbxTest);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.btnTest);
             this.Controls.Add(this.lbxTest);
@@ -771,6 +800,9 @@
         private System.Windows.Forms.Label lblHoldingIDLabel;
         private System.Windows.Forms.Button btnAddHolding;
         private System.Windows.Forms.DataGridView dgvHoldings;
+        private System.Windows.Forms.ComboBox cbxTest;
+        private System.Windows.Forms.Label lblHoldingLocation;
+        private System.Windows.Forms.TextBox txtHoldingLocaton;
     }
 }
 

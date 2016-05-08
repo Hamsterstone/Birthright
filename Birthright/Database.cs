@@ -80,7 +80,7 @@ namespace Birthright
                         myCommand.CommandText = "AdminUpdateRealm";
                         myCommand.Parameters.AddWithValue("@RealmIDIn", data["RealmID"]);
                         myCommand.Parameters.AddWithValue("@RealmNameIn", data["RealmName"]);
-                        myCommand.Parameters.AddWithValue("@RealmOwnerIn", data["RealmOwner"]);
+                        myCommand.Parameters.AddWithValue("@RealmOwnerIDFKIn", data["RealmOwner"]);
 
                         break;
                     case "Delete Realm":
@@ -92,21 +92,21 @@ namespace Birthright
                     case "Add New Province":
                         myCommand.CommandText = "AdminAddProvince";
                         myCommand.Parameters.AddWithValue("@ProvinceNameIn", data["ProvinceName"]);
-                        myCommand.Parameters.AddWithValue("@ProvinceSizeIn", data["ProvinceSize"]);
+                        myCommand.Parameters.AddWithValue("@ProvinceSizeIn", data["ProvinceSize"]);//convert to int?
                         myCommand.Parameters.AddWithValue("@ProvinceTerrainIn", data["ProvinceTerrain"]);
                         myCommand.Parameters.AddWithValue("@ProvinceSecondaryTerrainIn", data["ProvinceSecondaryTerrain"]);
-                        myCommand.Parameters.AddWithValue("@ProvinceOwnerIn", data["ProvinceOwner"]);
+                        myCommand.Parameters.AddWithValue("@ProvinceRealmFKIn", data["ProvinceOwner"]);//may need converting to RealmFKID from ruler name/abbr string.
                         myCommand.Parameters.AddWithValue("@ProvinceLoyaltyIn", data["ProvinceLoyalty"]);
                         myCommand.Parameters.AddWithValue("@ProvinceRoadIn", data["ProvinceRoad"]);
                         break;
                     case "Update Province":
-                        myCommand.CommandText = "";
+                        myCommand.CommandText = "AdminUpdateProvince";
                         myCommand.Parameters.AddWithValue("@ProvinceIDIn", data["ProvinceID"]);
                         myCommand.Parameters.AddWithValue("@ProvinceNameIn", data["ProvinceName"]);
                         myCommand.Parameters.AddWithValue("@ProvinceSizeIn", data["ProvinceSize"]);
                         myCommand.Parameters.AddWithValue("@ProvinceTerrainIn", data["ProvinceTerrain"]);
                         myCommand.Parameters.AddWithValue("@ProvinceSecondaryTerrainIn", data["ProvinceSecondaryTerrain"]);
-                        myCommand.Parameters.AddWithValue("@ProvinceOwnerIn", data["ProvinceOwner"]);
+                        myCommand.Parameters.AddWithValue("@ProvinceOwnerFLIn", data["ProvinceOwner"]);
                         myCommand.Parameters.AddWithValue("@ProvinceLoyaltyIn", data["ProvinceLoyalty"]);
                         myCommand.Parameters.AddWithValue("@ProvinceRoadIn", data["ProvinceRoad"]);
                         break;
@@ -117,17 +117,20 @@ namespace Birthright
                         myCommand.Parameters.AddWithValue("@IDNumber", data["ProvinceID"]);
                         break;
                     case "Add New Holding":
-                        myCommand.CommandText = "";
+                        myCommand.CommandText = "AdminAddHolding";
                         myCommand.Parameters.AddWithValue("@HoldingTypeIn", data["HoldingType"]);
                         myCommand.Parameters.AddWithValue("@HoldingSizeIn", data["HoldingSize"]);
-                        myCommand.Parameters.AddWithValue("@HoldingOwnerIn", data["HoldingOwner"]);
+                        myCommand.Parameters.AddWithValue("@HoldingRealmIDFKIn", data["HoldingOwner"]);
+                        myCommand.Parameters.AddWithValue("@HoldingLocationIDFKIn", data["HoldingLocation"]);
+
                         break;
                     case "Update Holding":
-                        myCommand.CommandText = "";
+                        myCommand.CommandText = "AdminUpdateHolding";
                         myCommand.Parameters.AddWithValue("@HoldingIDIn", data["HoldingID"]);
                         myCommand.Parameters.AddWithValue("@HoldingTypeIn", data["HoldingType"]);
                         myCommand.Parameters.AddWithValue("@HoldingSizeIn", data["HoldingSize"]);
-                        myCommand.Parameters.AddWithValue("@HoldingOwnerIn", data["HoldingOwner"]);
+                        myCommand.Parameters.AddWithValue("@HoldingRealmIDFKIn", data["HoldingOwner"]);
+                        myCommand.Parameters.AddWithValue("@HoldingLocationIDFKIn", data["HoldingLocation"]);
                         break;
                     case "Delete Holding":
                         myCommand.CommandText = "AdminDelete";
