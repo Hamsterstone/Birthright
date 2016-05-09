@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,7 +10,7 @@ namespace Birthright
     class GameInfo
     {
 
-        public static readonly string[] HoldingTypes = {"Law", "Guild", "Temple", "Source"};
+        public static readonly string[] HoldingTypes = {"Law",  "Temple","Guild", "Source"};
 
         public class TerrainType
         {
@@ -39,6 +40,61 @@ namespace Birthright
             {"Coast", new TerrainType {TerrainName = "Coast", MaxPop = 0, MoveCost = 0, SourcePotential = 7}}
         };
 
+
+        
+        public static BiDictionary<int, string> RulerIdToNameBiDictionary=new BiDictionary<int, string>();
+        public static BiDictionary<int, string> RulerIdToAbbrBiDictionary = new BiDictionary<int, string>();
+        public static BiDictionary<int, string> RealmIdToNameBiDictionary = new BiDictionary<int, string>();
+        public static BiDictionary<int, string> ProvinceIdToNameBiDictionary = new BiDictionary<int, string>();
+        public static BiDictionary<int, string> RealmIdVsRulerAbbrBiDictionary = new BiDictionary<int, string>();
+        public static int ConvertToIDNumber(string field, string lookup)
+        {
+            try
+            {
+                switch (lookup)
+                {
+                    case "RulerName":
+                        return RulerIdToNameBiDictionary.GetBySecond(field);
+                    case "RulerAbbr":
+                        return RulerIdToAbbrBiDictionary.GetBySecond(field);
+                    case "RealmName":
+                        return RealmIdToNameBiDictionary.GetBySecond(field);
+                    case "ProvinceName":
+                        return ProvinceIdToNameBiDictionary.GetBySecond(field);
+                    case "RealmIDVsRulerAbbr":
+                        return RealmIdVsRulerAbbrBiDictionary.GetBySecond(field);
+                }
+                return 0;
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+        public static string ConvertFromIDNumber(int field, string lookup)
+        {
+            try
+            {
+                switch (lookup)
+                {
+                    case "RulerName":
+                        return RulerIdToNameBiDictionary.GetByFirst(field);
+                    case "RulerAbbr":
+                        return RulerIdToAbbrBiDictionary.GetByFirst(field);
+                    case "RealmName":
+                        return RealmIdToNameBiDictionary.GetByFirst(field);
+                    case "ProvinceName":
+                        return ProvinceIdToNameBiDictionary.GetByFirst(field);
+                    case "RealmIDVsRulerAbbr":
+                        return RealmIdVsRulerAbbrBiDictionary.GetByFirst(field);
+                }
+                return "";
+            }
+            catch
+            {
+                return "";
+            }
+        }
         public static string TerrainNameCorrector(string name)
         {
             if (name != "")

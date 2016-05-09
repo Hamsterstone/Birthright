@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BiDictionary.cs" />
     <Compile Include="CCBoxItem.cs" />
     <Compile Include="CheckedComboBox.cs">
       <SubType>Component</SubType>

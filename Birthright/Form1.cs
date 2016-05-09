@@ -15,12 +15,14 @@ namespace Birthright
     public partial class Form1 : Form
     {
         Database myDatabase = new Database();
+
         public Form1()
         {
             InitializeComponent();
             LoadDatabase();
             //ccbProvinceSecondaryTerrain.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.ccb_ItemCheck);
             SetUpComboBoxes();
+            GetInfoForGameinfo();
         }
 
 
@@ -30,7 +32,7 @@ namespace Birthright
             foreach (KeyValuePair<string, GameInfo.TerrainType> terrainDictionaryElement in GameInfo.Terrain)
             {
                 string terrainName = terrainDictionaryElement.Value.TerrainName;
-                CCBoxItem item = new CCBoxItem(terrainName,count);
+                CCBoxItem item = new CCBoxItem(terrainName, count);
                 cbxProvinceTerrain.Items.Add(terrainName);
                 cbxTest.Items.Add(terrainName);
                 ccbProvinceSecondaryTerrain.Items.Add(item);
@@ -48,7 +50,7 @@ namespace Birthright
             // Make the "Name" property the one to display, rather than the ToString() representation.
             ccbProvinceSecondaryTerrain.DisplayMember = "Name";
             ccbProvinceSecondaryTerrain.ValueSeparator = ", ";
-             
+
         }
 
         public void LoadDatabase()
@@ -68,12 +70,72 @@ namespace Birthright
                 dgvHoldings.DataSource = myDatabase.FillDatatable("Holding");
                 dgvHoldings.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
 
-            } 
+            }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
+
+        }
+
+        public void GetInfoForGameinfo()
+        {
+
+            Dictionary<int, string> rulerNameDictionary =
+                myDatabase.FillIDBiDictionaries("Ruler")
+                    .AsEnumerable()
+                    .ToDictionary<DataRow, int, string>(row => Convert.ToInt32(row[0]), row => row[1].ToString());
+            Dictionary<int, string> realmNameDictionary =
+                myDatabase.FillIDBiDictionaries("Realm")
+                    .AsEnumerable()
+                    .ToDictionary<DataRow, int, string>(row => Convert.ToInt32(row[0]), row => row[1].ToString());
+            Dictionary<int, string> provinceNameDictionary =
+                myDatabase.FillIDBiDictionaries("Province")
+                    .AsEnumerable()
+                    .ToDictionary<DataRow, int, string>(row => Convert.ToInt32(row[0]), row => row[1].ToString());
+            Dictionary<int, string> rulerAbbreviationDictionary =
+                myDatabase.FillIDBiDictionaries("Abbr")
+                    .AsEnumerable()
+                    .ToDictionary<DataRow, int, string>(row => Convert.ToInt32(row[0]), row => row[1].ToString());
+            Dictionary<int, string> realmIdVsRulerAbbr =
+                myDatabase.FillIDBiDictionaries("RealmIDVsRulerAbbr")
+                    .AsEnumerable()
+                    .ToDictionary<DataRow, int, string>(row => Convert.ToInt32(row[0]), row => row[1].ToString());
+            GameInfo.RulerIdToNameBiDictionary.Clear();
+            GameInfo.RulerIdToAbbrBiDictionary.Clear();
+            GameInfo.RealmIdToNameBiDictionary.Clear();
+            GameInfo.ProvinceIdToNameBiDictionary.Clear();
+            GameInfo.RealmIdVsRulerAbbrBiDictionary.Clear();
             
+
+            foreach (KeyValuePair<int, string> pair in rulerNameDictionary)
+            {
+                GameInfo.RulerIdToNameBiDictionary.Add(pair.Key, pair.Value);
+            }
+            foreach (KeyValuePair<int, string> pair in realmNameDictionary)
+            {
+                GameInfo.RealmIdToNameBiDictionary.Add(pair.Key, pair.Value);
+            }
+            foreach (KeyValuePair<int, string> pair in provinceNameDictionary)
+            {
+                GameInfo.ProvinceIdToNameBiDictionary.Add(pair.Key, pair.Value);
+            }
+            foreach (KeyValuePair<int, string> pair in rulerAbbreviationDictionary)
+            {
+                GameInfo.RulerIdToAbbrBiDictionary.Add(pair.Key, pair.Value);
+            }
+            foreach (KeyValuePair<int, string> pair in realmIdVsRulerAbbr)
+            {
+                GameInfo.RealmIdVsRulerAbbrBiDictionary.Add(pair.Key, pair.Value);
+            }
+        }
+
+
+        private void BtnRefresh_Click(object sender, EventArgs e)
+        {
+            myDatabase.RefreshCombinedView();
+            dgvMain.DataSource = myDatabase.FillDatatable("CombinedView");
+            dgvMain.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
         }
 
         private void DGV_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -91,7 +153,7 @@ namespace Birthright
                         lblRulerIDText.Text = fakeDataGridView.Rows[e.RowIndex].Cells[0].Value.ToString();
                         txtRulerName.Text = fakeDataGridView.Rows[e.RowIndex].Cells[1].Value.ToString();
                         txtRulerAbbreviation.Text = fakeDataGridView.Rows[e.RowIndex].Cells[2].Value.ToString();
-                        
+
 
                     }
                 }
@@ -101,8 +163,8 @@ namespace Birthright
                     {
                         lblRealmIDText.Text = fakeDataGridView.Rows[e.RowIndex].Cells[0].Value.ToString();
                         txtRealmName.Text = fakeDataGridView.Rows[e.RowIndex].Cells[1].Value.ToString();
-                        txtRealmOwner.Text = fakeDataGridView.Rows[e.RowIndex].Cells[2].Value.ToString();
-                        
+                        txtRealmOwner.Text = GameInfo.ConvertFromIDNumber(Convert.ToInt32(fakeDataGridView.Rows[e.RowIndex].Cells[2].Value), "RulerName");
+
 
                     }
                 }
@@ -115,9 +177,9 @@ namespace Birthright
                         txtProvinceSize.Text = fakeDataGridView.Rows[e.RowIndex].Cells[2].Value.ToString();
                         cbxProvinceTerrain.Text = fakeDataGridView.Rows[e.RowIndex].Cells[3].Value.ToString();
                         SetCheckedComboBoxCheckedItems(fakeDataGridView.Rows[e.RowIndex].Cells[4].Value.ToString());
-                        txtProvinceOwner.Text = fakeDataGridView.Rows[e.RowIndex].Cells[5].Value.ToString();
+                        txtProvinceOwner.Text = GameInfo.ConvertFromIDNumber(Convert.ToInt32(fakeDataGridView.Rows[e.RowIndex].Cells[5].Value),"RealmName");
                         txtProvinceLoyalty.Text = fakeDataGridView.Rows[e.RowIndex].Cells[6].Value.ToString();
-                        cbxProvinceRoad.Checked= Convert.ToBoolean( fakeDataGridView.Rows[e.RowIndex].Cells[7].Value);
+                        cbxProvinceRoad.Checked = Convert.ToBoolean(fakeDataGridView.Rows[e.RowIndex].Cells[7].Value);
                     }
                 }
                 else if (sender == dgvHoldings)
@@ -125,11 +187,10 @@ namespace Birthright
                     if (e.RowIndex >= 0)
                     {
                         lblHoldingIDText.Text = fakeDataGridView.Rows[e.RowIndex].Cells[0].Value.ToString();
-                        cbxHoldingType.Text = fakeDataGridView.Rows[e.RowIndex].Cells[1].Value.ToString();
-                        txtHoldingSize.Text = fakeDataGridView.Rows[e.RowIndex].Cells[2].Value.ToString();
-                        txtHoldingOwner.Text = fakeDataGridView.Rows[e.RowIndex].Cells[3].Value.ToString();
-                        
-
+                        txtHoldingLocaton.Text = GameInfo.ConvertFromIDNumber(Convert.ToInt32(fakeDataGridView.Rows[e.RowIndex].Cells[1].Value), "ProvinceName");
+                        cbxHoldingType.Text = fakeDataGridView.Rows[e.RowIndex].Cells[2].Value.ToString();
+                        txtHoldingSize.Text = fakeDataGridView.Rows[e.RowIndex].Cells[3].Value.ToString();
+                        txtHoldingOwner.Text = GameInfo.ConvertFromIDNumber(Convert.ToInt32(fakeDataGridView.Rows[e.RowIndex].Cells[4].Value), "RealmIDVsRulerAbbr");
                     }
                 }
             }
@@ -142,16 +203,23 @@ namespace Birthright
         public void SetCheckedComboBoxCheckedItems(string items)
         {
             List<string> things = items.Split(',').Select(p => p.Trim()).ToList();
-            
+
             for (int i = 0; i < ccbProvinceSecondaryTerrain.Items.Count; i++)
             {
-               
-            
+
+
                 if (things.Contains(ccbProvinceSecondaryTerrain.Items[i].ToString()))
                 {
-                    ccbProvinceSecondaryTerrain.SetItemCheckState(ccbProvinceSecondaryTerrain.Items.IndexOf(ccbProvinceSecondaryTerrain.Items[i]),CheckState.Checked) ;
+                    ccbProvinceSecondaryTerrain.SetItemCheckState(
+                        ccbProvinceSecondaryTerrain.Items.IndexOf(ccbProvinceSecondaryTerrain.Items[i]),
+                        CheckState.Checked);
                 }
-                else { ccbProvinceSecondaryTerrain.SetItemCheckState(ccbProvinceSecondaryTerrain.Items.IndexOf(ccbProvinceSecondaryTerrain.Items[i]), CheckState.Unchecked); }
+                else
+                {
+                    ccbProvinceSecondaryTerrain.SetItemCheckState(
+                        ccbProvinceSecondaryTerrain.Items.IndexOf(ccbProvinceSecondaryTerrain.Items[i]),
+                        CheckState.Unchecked);
+                }
             }
 
         }
@@ -184,10 +252,11 @@ namespace Birthright
                 MessageBox.Show(ex.Message);
             }
         }
+
         private void btnAdminButton_Click(object sender, EventArgs e)
         {
             Button fakeButton = sender as Button;
-            
+
 
 
             Dictionary<string, string> dictData = new Dictionary<string, string>();
@@ -197,38 +266,134 @@ namespace Birthright
             dictData.Add("RulerAbbreviation", txtRulerAbbreviation.Text);
             dictData.Add("RealmID", lblRealmIDText.Text);
             dictData.Add("RealmName", txtRealmName.Text);
-            dictData.Add("RealmOwner", txtRealmOwner.Text);
+            dictData.Add("RealmOwner",  GameInfo.ConvertToIDNumber(txtRealmOwner.Text, "RulerName").ToString());
             dictData.Add("ProvinceID", lblProvinceIDText.Text);
             dictData.Add("ProvinceName", txtProvinceName.Text);
             dictData.Add("ProvinceSize", txtProvinceSize.Text);
             dictData.Add("ProvinceTerrain", GameInfo.TerrainNameCorrector(cbxProvinceTerrain.Text));
             dictData.Add("ProvinceSecondaryTerrain", GameInfo.SecondaryTerrainNameCorrector(ccbProvinceSecondaryTerrain.Text));
-            dictData.Add("ProvinceOwner", txtProvinceOwner.Text);
+            dictData.Add("ProvinceOwner",  GameInfo.ConvertToIDNumber(txtProvinceOwner.Text, "RealmName").ToString());
             dictData.Add("ProvinceLoyalty", txtProvinceLoyalty.Text);
             dictData.Add("ProvinceRoad", cbxProvinceRoad.Checked.ToString());
             dictData.Add("HoldingID", lblHoldingIDText.Text);
             dictData.Add("HoldingType", cbxHoldingType.Text);
             dictData.Add("HoldingSize", txtHoldingSize.Text);
-            dictData.Add("HoldingOwner", txtHoldingOwner.Text);
-            dictData.Add("HoldingLocation",txtHoldingLocaton.Text);
+            dictData.Add("HoldingOwner",  GameInfo.ConvertToIDNumber(txtHoldingOwner.Text, "RealmIDVsRulerAbbr").ToString());
+            dictData.Add("HoldingLocation",  GameInfo.ConvertToIDNumber(txtHoldingLocaton.Text, "ProvinceName").ToString());
 
 
 
             string buttonName = fakeButton.Text;
             //TODO Reactivate for database 
-            // myDatabase.AdminTools(dictData, buttonName);
+            myDatabase.AdminTools(dictData, buttonName);
             LoadDatabase();
+            GetInfoForGameinfo();
         }
+
+
         private void btnTest_Click(object sender, EventArgs e)
         {
+            lbxTest.Items.Clear();
+
+            Dictionary<string, string> dictData = new Dictionary<string, string>();
+
+            dictData.Add("RulerID", lblRulerIDText.Text);
+            dictData.Add("RulerName", txtRulerName.Text);
+            dictData.Add("RulerAbbreviation", txtRulerAbbreviation.Text);
+            dictData.Add("RealmID", lblRealmIDText.Text);
+            dictData.Add("RealmName", txtRealmName.Text);
+            dictData.Add("RealmOwner", GameInfo.ConvertToIDNumber(txtRealmOwner.Text, "RulerName").ToString());
+            dictData.Add("ProvinceID", lblProvinceIDText.Text);
+            dictData.Add("ProvinceName", txtProvinceName.Text);
+            dictData.Add("ProvinceSize", txtProvinceSize.Text);
+            dictData.Add("ProvinceTerrain", GameInfo.TerrainNameCorrector(cbxProvinceTerrain.Text));
+            dictData.Add("ProvinceSecondaryTerrain", GameInfo.SecondaryTerrainNameCorrector(ccbProvinceSecondaryTerrain.Text));
+            dictData.Add("ProvinceOwner", GameInfo.ConvertToIDNumber(txtProvinceOwner.Text, "RealmName").ToString());
+            dictData.Add("ProvinceLoyalty", txtProvinceLoyalty.Text);
+            dictData.Add("ProvinceRoad", cbxProvinceRoad.Checked.ToString());
+            dictData.Add("HoldingID", lblHoldingIDText.Text);
+            dictData.Add("HoldingType", cbxHoldingType.Text);
+            dictData.Add("HoldingSize", txtHoldingSize.Text);
+            dictData.Add("HoldingOwner", GameInfo.ConvertToIDNumber(txtHoldingOwner.Text, "RealmName").ToString());
+            dictData.Add("HoldingLocation", GameInfo.ConvertToIDNumber(txtHoldingLocaton.Text, "ProvinceName").ToString());
+
+            foreach (KeyValuePair<string, string> pair in dictData)
+            {
+                lbxTest.Items.Add(pair.Key + " " + pair.Value);
+            }
+
+
+        //string testString3="";
+        //    string teststring2 = "";
+        //    int testInt = 0;
+        //    switch (cbxTest.SelectedIndex)
+        //    {
+        //        case 0:
+        //            teststring2 = txtRulerName.Text;
+        //            testString3 = "RulerName";
+        //            testInt = Convert.ToInt32(lblRulerIDText.Text);
+        //            break;
+        //        case 1:
+        //            testString3 = "RulerAbbr";
+        //            teststring2 = txtRulerAbbreviation.Text;
+        //            testInt = Convert.ToInt32(lblRulerIDText.Text);
+        //            break;
+        //        case 2:
+        //            testString3 = "RealmName";
+        //            teststring2 = txtRealmName.Text;
+        //            testInt = Convert.ToInt32(lblRealmIDText.Text);
+        //            break;
+        //        case 3:
+        //            testString3 = "ProvinceName";
+        //            teststring2 = txtProvinceName.Text;
+        //            testInt = Convert.ToInt32(lblProvinceIDText.Text);
+        //            break;
+        //    }
+        //    string testString = GameInfo.ConvertFromIDNumber(testInt,testString3);
+        //    string testString2 = GameInfo.ConvertToIDNumber(teststring2,testString3).ToString();
+        //    lbxTest.Items.Add(testString);
+        //    lbxTest.Items.Add(testString2);
+        //    // //GameInfo.RulerIdToNameDictionary.Add();
+        //    // Dictionary < int,
+            // string > testDictionary=
+            //     myDatabase.FillIDBiDictionaries("Ruler").AsEnumerable().ToDictionary<DataRow, int, string>(row => Convert.ToInt32(row[0]),row => row[1].ToString());
+            // Dictionary<int,
+            //string> testDictionary2 =
+            //    myDatabase.FillIDBiDictionaries("Realm").AsEnumerable().ToDictionary<DataRow, int, string>(row => Convert.ToInt32(row[0]), row => row[1].ToString()); Dictionary<int,
+            // string> testDictionary3 =
+            //     myDatabase.FillIDBiDictionaries("Province").AsEnumerable().ToDictionary<DataRow, int, string>(row => Convert.ToInt32(row[0]), row => row[1].ToString()); Dictionary<int,
+            // string> testDictionary4 =
+            //     myDatabase.FillIDBiDictionaries("Abbr").AsEnumerable().ToDictionary<DataRow, int, string>(row => Convert.ToInt32(row[0]), row => row[1].ToString());
+            // foreach (KeyValuePair<int, string> pair in testDictionary)
+            // {
+            //     lbxTest.Items.Add(pair.Key+" "+pair.Value);
+            // }
+            // foreach (KeyValuePair<int, string> pair in testDictionary2)
+            // {
+            //     lbxTest.Items.Add(pair.Key + " " + pair.Value);
+            // }
+            // foreach (KeyValuePair<int, string> pair in testDictionary3)
+            // {
+            //     lbxTest.Items.Add(pair.Key + " " + pair.Value);
+            // }
+            // foreach (KeyValuePair<int, string> pair in testDictionary4)
+            // {
+            //     lbxTest.Items.Add(pair.Key + " " + pair.Value);
+            // }
+
+
+
+
             // GameInfo newGameInfo=new GameInfo();
             //lbxTest.Items.Add("Plains " + GameInfo.Terrain["Plains"].MaxPop+" "+GameInfo.Terrain["Plains"].MoveCost+" " + GameInfo.Terrain["Plains"].SourcePotential);
             //lbxTest.Items.Add(GameInfo.TerrainNameCorrector(ccbProvinceSecondaryTerrain.Text));
             //lbxTest.Items.Add(GameInfo.SecondaryTerrainNameCorrector(ccbProvinceSecondaryTerrain.Text));
 
         }
-    }
 }
+
+}
+
 /*// load views on tab click
         private void TabClick(object sender, EventArgs e)
         {

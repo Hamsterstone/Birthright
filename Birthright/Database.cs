@@ -73,7 +73,7 @@ namespace Birthright
                     case "Add New Realm":
                         myCommand.CommandText = "AdminAddRealm";
                         myCommand.Parameters.AddWithValue("@RealmNameIn", data["RealmName"]);
-                        myCommand.Parameters.AddWithValue("@RealmOwnerIn", data["RealmOwner"]);
+                        myCommand.Parameters.AddWithValue("@RealmOwnerIDFKIn", data["RealmOwner"]);
 
                         break;
                     case "Update Realm":
@@ -95,7 +95,7 @@ namespace Birthright
                         myCommand.Parameters.AddWithValue("@ProvinceSizeIn", data["ProvinceSize"]);//convert to int?
                         myCommand.Parameters.AddWithValue("@ProvinceTerrainIn", data["ProvinceTerrain"]);
                         myCommand.Parameters.AddWithValue("@ProvinceSecondaryTerrainIn", data["ProvinceSecondaryTerrain"]);
-                        myCommand.Parameters.AddWithValue("@ProvinceRealmFKIn", data["ProvinceOwner"]);//may need converting to RealmFKID from ruler name/abbr string.
+                        myCommand.Parameters.AddWithValue("@ProvinceRealmIDFKIn", data["ProvinceOwner"]);//may need converting to RealmFKID from ruler name/abbr string.
                         myCommand.Parameters.AddWithValue("@ProvinceLoyaltyIn", data["ProvinceLoyalty"]);
                         myCommand.Parameters.AddWithValue("@ProvinceRoadIn", data["ProvinceRoad"]);
                         break;
@@ -106,7 +106,7 @@ namespace Birthright
                         myCommand.Parameters.AddWithValue("@ProvinceSizeIn", data["ProvinceSize"]);
                         myCommand.Parameters.AddWithValue("@ProvinceTerrainIn", data["ProvinceTerrain"]);
                         myCommand.Parameters.AddWithValue("@ProvinceSecondaryTerrainIn", data["ProvinceSecondaryTerrain"]);
-                        myCommand.Parameters.AddWithValue("@ProvinceOwnerFLIn", data["ProvinceOwner"]);
+                        myCommand.Parameters.AddWithValue("@ProvinceRealmIDFKIn", data["ProvinceOwner"]);
                         myCommand.Parameters.AddWithValue("@ProvinceLoyaltyIn", data["ProvinceLoyalty"]);
                         myCommand.Parameters.AddWithValue("@ProvinceRoadIn", data["ProvinceRoad"]);
                         break;
@@ -161,7 +161,63 @@ namespace Birthright
             }
         }
 
+        internal void RefreshCombinedView()
+        {
 
+
+            SqlCommand myCommand = connection.CreateCommand();
+            myCommand.Connection = connection;
+            myCommand.CommandText = "BuildCombinedViewTable";
+            myCommand.CommandType = CommandType.StoredProcedure;
+
+            connection.Open();
+            myCommand.ExecuteNonQuery();
+            connection.Close();
+        }
+
+        public DataTable FillIDBiDictionaries(string biDictionaryName)
+        {
+            try
+            {
+
+                DataTable myDataTable = new DataTable();
+
+                SqlCommand myCommand = connection.CreateCommand();
+                myCommand.Connection = connection;
+
+                if (biDictionaryName == "Abbr")
+                {
+                    myCommand.CommandText = "GetIDAndAbbr";
+                    myCommand.Parameters.AddWithValue("@ViewName", "Ruler");
+                }else if (biDictionaryName == "RealmIDVsRulerAbbr")
+                {
+                    myCommand.CommandText = "ShowAllFrom";
+                    myCommand.Parameters.AddWithValue("@ViewName", "RealmIDVsRulerAbbr");
+                    
+                }
+                else {
+                    myCommand.CommandText = "GetIDAndName";
+                    myCommand.Parameters.AddWithValue("@ViewName", biDictionaryName);
+                }
+
+                myCommand.CommandType = CommandType.StoredProcedure;
+
+           using (myDataAdapter = new SqlDataAdapter(myCommand))
+                {
+                    connection.Open();
+                    myDataAdapter.Fill(myDataTable);
+                    connection.Close();
+                }
+                return myDataTable;
+
+            }
+            catch (Exception ex)
+            {
+                connection.Close();
+                MessageBox.Show(ex.Message);
+                return null;
+            }
+}
 
         public DataTable SearchForItem(string table, string item)
         {
@@ -230,71 +286,7 @@ namespace Birthright
 }
 /*
   
-        public DataTable SearchForItem(string table, string item)
-        {
-            DataTable myDataTable = new DataTable();
-
-            SqlCommand myCommand = connection.CreateCommand();
-            myCommand.Connection = connection;
-
-            if (table == "Movies")
-            {
-                myCommand.CommandText = "FindFromMovies";
-            }
-            else if (table == "Customer")
-
-
-            {
-                myCommand.CommandText = "FindFromCustomer";
-
-            }
-
-
-
-            // myCommand.CommandText = "ShowAllFrom";
-            myCommand.CommandType = CommandType.StoredProcedure;
-            myCommand.Parameters.AddWithValue("@Find", item);
-            using (myDataAdapter = new SqlDataAdapter(myCommand))
-            {
-                connection.Open();
-                myDataAdapter.Fill(myDataTable);
-                connection.Close();
-            }
-            return myDataTable;
-
-
-            //string sqlQuery = null;
-            //DataTable myDataTable = new DataTable();
-
-            //switch (table)
-            //{
-            //    case "Movies":
-            //        sqlQuery = @"SELECT * FROM " + table + " WHERE Title LIKE '%" + item + "%' ORDER by Title";
-            //        //   DataTable myDataTable = new DataTable();
-            //        using (myDataAdapter = new SqlDataAdapter(sqlQuery, connection))
-            //        {
-            //            connection.Open();
-            //            myDataAdapter.Fill(myDataTable);
-            //            connection.Close();
-            //            return myDataTable;
-            //        }
-            //    case "Customer":
-            //        sqlQuery = @"SELECT * FROM " + table + " WHERE LastName LIKE '" + item + "%' ORDER by LastName";
-            //        //  DataTable myDataTable = new DataTable();
-            //        using (myDataAdapter = new SqlDataAdapter(sqlQuery, connection))
-            //        {
-            //            connection.Open();
-            //            myDataAdapter.Fill(myDataTable);
-            //            connection.Close();
-            //            return myDataTable;
-            //        }
-            //    default:
-            //        MessageBox.Show("Oops! Database.SearchForItem");
-            //        return null;
-            //}
-        }
-
-        public DataTable RentalDataSelect(string select)
+    public DataTable RentalDataSelect(string select)
         {
             DataTable myDataTable = new DataTable();
 
