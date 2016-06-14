@@ -34,6 +34,7 @@
             this.btnTest = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabMain = new System.Windows.Forms.TabPage();
+            this.btnRefresh = new System.Windows.Forms.Button();
             this.tabRulers = new System.Windows.Forms.TabPage();
             this.btnDeleteRuler = new System.Windows.Forms.Button();
             this.btnUpdateRuler = new System.Windows.Forms.Button();
@@ -91,9 +92,10 @@
             this.lblHoldingIDLabel = new System.Windows.Forms.Label();
             this.btnAddHolding = new System.Windows.Forms.Button();
             this.dgvHoldings = new System.Windows.Forms.DataGridView();
+            this.tabMap = new System.Windows.Forms.TabPage();
             this.cbxTest = new System.Windows.Forms.ComboBox();
-            this.btnRefresh = new System.Windows.Forms.Button();
             this.ccbProvinceSecondaryTerrain = new Birthright.CheckedComboBox();
+            this.imageMap1 = new Birthright.ImageMap();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMain)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabMain.SuspendLayout();
@@ -105,6 +107,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvProvinces)).BeginInit();
             this.tabHoldings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvHoldings)).BeginInit();
+            this.tabMap.SuspendLayout();
             this.SuspendLayout();
             // 
             // dgvMain
@@ -149,6 +152,7 @@
             this.tabControl1.Controls.Add(this.tabRealms);
             this.tabControl1.Controls.Add(this.tabProvinces);
             this.tabControl1.Controls.Add(this.tabHoldings);
+            this.tabControl1.Controls.Add(this.tabMap);
             this.tabControl1.Location = new System.Drawing.Point(12, 12);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -166,6 +170,16 @@
             this.tabMain.TabIndex = 0;
             this.tabMain.Text = "Main";
             this.tabMain.UseVisualStyleBackColor = true;
+            // 
+            // btnRefresh
+            // 
+            this.btnRefresh.Location = new System.Drawing.Point(7, 379);
+            this.btnRefresh.Name = "btnRefresh";
+            this.btnRefresh.Size = new System.Drawing.Size(75, 23);
+            this.btnRefresh.TabIndex = 1;
+            this.btnRefresh.Text = "Refresh";
+            this.btnRefresh.UseVisualStyleBackColor = true;
+            this.btnRefresh.Click += new System.EventHandler(this.BtnRefresh_Click);
             // 
             // tabRulers
             // 
@@ -192,7 +206,7 @@
             this.btnDeleteRuler.Location = new System.Drawing.Point(196, 445);
             this.btnDeleteRuler.Name = "btnDeleteRuler";
             this.btnDeleteRuler.Size = new System.Drawing.Size(89, 23);
-            this.btnDeleteRuler.TabIndex = 10;
+            this.btnDeleteRuler.TabIndex = 4;
             this.btnDeleteRuler.Text = "Delete Ruler";
             this.btnDeleteRuler.UseVisualStyleBackColor = true;
             this.btnDeleteRuler.Click += new System.EventHandler(this.btnAdminButton_Click);
@@ -202,7 +216,7 @@
             this.btnUpdateRuler.Location = new System.Drawing.Point(101, 445);
             this.btnUpdateRuler.Name = "btnUpdateRuler";
             this.btnUpdateRuler.Size = new System.Drawing.Size(89, 23);
-            this.btnUpdateRuler.TabIndex = 9;
+            this.btnUpdateRuler.TabIndex = 3;
             this.btnUpdateRuler.Text = "Update Ruler";
             this.btnUpdateRuler.UseVisualStyleBackColor = true;
             this.btnUpdateRuler.Click += new System.EventHandler(this.btnAdminButton_Click);
@@ -212,14 +226,14 @@
             this.txtRulerAbbreviation.Location = new System.Drawing.Point(182, 402);
             this.txtRulerAbbreviation.Name = "txtRulerAbbreviation";
             this.txtRulerAbbreviation.Size = new System.Drawing.Size(100, 20);
-            this.txtRulerAbbreviation.TabIndex = 8;
+            this.txtRulerAbbreviation.TabIndex = 1;
             // 
             // lblRulerAbbreviation
             // 
             this.lblRulerAbbreviation.Location = new System.Drawing.Point(182, 382);
             this.lblRulerAbbreviation.Name = "lblRulerAbbreviation";
             this.lblRulerAbbreviation.Size = new System.Drawing.Size(100, 23);
-            this.lblRulerAbbreviation.TabIndex = 7;
+            this.lblRulerAbbreviation.TabIndex = 8;
             this.lblRulerAbbreviation.Text = "Ruler Abbreviation";
             // 
             // txtRulerName
@@ -227,14 +241,14 @@
             this.txtRulerName.Location = new System.Drawing.Point(66, 402);
             this.txtRulerName.Name = "txtRulerName";
             this.txtRulerName.Size = new System.Drawing.Size(100, 20);
-            this.txtRulerName.TabIndex = 6;
+            this.txtRulerName.TabIndex = 0;
             // 
             // lblRulerName
             // 
             this.lblRulerName.Location = new System.Drawing.Point(66, 382);
             this.lblRulerName.Name = "lblRulerName";
             this.lblRulerName.Size = new System.Drawing.Size(100, 23);
-            this.lblRulerName.TabIndex = 5;
+            this.lblRulerName.TabIndex = 7;
             this.lblRulerName.Text = "Ruler Name";
             // 
             // lblRulerIDText
@@ -242,14 +256,14 @@
             this.lblRulerIDText.Location = new System.Drawing.Point(7, 405);
             this.lblRulerIDText.Name = "lblRulerIDText";
             this.lblRulerIDText.Size = new System.Drawing.Size(56, 19);
-            this.lblRulerIDText.TabIndex = 4;
+            this.lblRulerIDText.TabIndex = 9;
             // 
             // lblRulerIDLabel
             // 
             this.lblRulerIDLabel.Location = new System.Drawing.Point(7, 382);
             this.lblRulerIDLabel.Name = "lblRulerIDLabel";
             this.lblRulerIDLabel.Size = new System.Drawing.Size(56, 23);
-            this.lblRulerIDLabel.TabIndex = 3;
+            this.lblRulerIDLabel.TabIndex = 6;
             this.lblRulerIDLabel.Text = "RulerID";
             // 
             // btnAddNewRuler
@@ -268,7 +282,7 @@
             this.dgvRulers.Location = new System.Drawing.Point(6, 6);
             this.dgvRulers.Name = "dgvRulers";
             this.dgvRulers.Size = new System.Drawing.Size(872, 366);
-            this.dgvRulers.TabIndex = 1;
+            this.dgvRulers.TabIndex = 5;
             this.dgvRulers.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DGV_CellContentClick);
             // 
             // tabRealms
@@ -296,7 +310,7 @@
             this.btnDeleteRealm.Location = new System.Drawing.Point(195, 445);
             this.btnDeleteRealm.Name = "btnDeleteRealm";
             this.btnDeleteRealm.Size = new System.Drawing.Size(86, 34);
-            this.btnDeleteRealm.TabIndex = 19;
+            this.btnDeleteRealm.TabIndex = 4;
             this.btnDeleteRealm.Text = "Delete Realm";
             this.btnDeleteRealm.UseVisualStyleBackColor = true;
             this.btnDeleteRealm.Click += new System.EventHandler(this.btnAdminButton_Click);
@@ -306,7 +320,7 @@
             this.btnUpdateRealm.Location = new System.Drawing.Point(100, 445);
             this.btnUpdateRealm.Name = "btnUpdateRealm";
             this.btnUpdateRealm.Size = new System.Drawing.Size(86, 34);
-            this.btnUpdateRealm.TabIndex = 18;
+            this.btnUpdateRealm.TabIndex = 3;
             this.btnUpdateRealm.Text = "Update Realm";
             this.btnUpdateRealm.UseVisualStyleBackColor = true;
             this.btnUpdateRealm.Click += new System.EventHandler(this.btnAdminButton_Click);
@@ -316,7 +330,7 @@
             this.txtRealmOwner.Location = new System.Drawing.Point(181, 405);
             this.txtRealmOwner.Name = "txtRealmOwner";
             this.txtRealmOwner.Size = new System.Drawing.Size(100, 20);
-            this.txtRealmOwner.TabIndex = 17;
+            this.txtRealmOwner.TabIndex = 1;
             // 
             // lblRealmOwner
             // 
@@ -331,7 +345,7 @@
             this.txtRealmName.Location = new System.Drawing.Point(65, 405);
             this.txtRealmName.Name = "txtRealmName";
             this.txtRealmName.Size = new System.Drawing.Size(100, 20);
-            this.txtRealmName.TabIndex = 15;
+            this.txtRealmName.TabIndex = 0;
             // 
             // lblRealmName
             // 
@@ -361,7 +375,7 @@
             this.btnAddNewRealm.Location = new System.Drawing.Point(5, 445);
             this.btnAddNewRealm.Name = "btnAddNewRealm";
             this.btnAddNewRealm.Size = new System.Drawing.Size(86, 34);
-            this.btnAddNewRealm.TabIndex = 11;
+            this.btnAddNewRealm.TabIndex = 2;
             this.btnAddNewRealm.Text = "Add New Realm";
             this.btnAddNewRealm.UseVisualStyleBackColor = true;
             this.btnAddNewRealm.Click += new System.EventHandler(this.btnAdminButton_Click);
@@ -372,7 +386,7 @@
             this.dgvRealms.Location = new System.Drawing.Point(6, 6);
             this.dgvRealms.Name = "dgvRealms";
             this.dgvRealms.Size = new System.Drawing.Size(872, 366);
-            this.dgvRealms.TabIndex = 1;
+            this.dgvRealms.TabIndex = 5;
             this.dgvRealms.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DGV_CellContentClick);
             // 
             // tabProvinces
@@ -410,7 +424,7 @@
             this.cbxProvinceTerrain.Location = new System.Drawing.Point(302, 403);
             this.cbxProvinceTerrain.Name = "cbxProvinceTerrain";
             this.cbxProvinceTerrain.Size = new System.Drawing.Size(144, 21);
-            this.cbxProvinceTerrain.TabIndex = 41;
+            this.cbxProvinceTerrain.TabIndex = 2;
             // 
             // cbxProvinceRoad
             // 
@@ -418,7 +432,7 @@
             this.cbxProvinceRoad.Location = new System.Drawing.Point(887, 404);
             this.cbxProvinceRoad.Name = "cbxProvinceRoad";
             this.cbxProvinceRoad.Size = new System.Drawing.Size(15, 14);
-            this.cbxProvinceRoad.TabIndex = 39;
+            this.cbxProvinceRoad.TabIndex = 6;
             this.cbxProvinceRoad.UseVisualStyleBackColor = true;
             // 
             // lblProvinceRoad
@@ -434,7 +448,7 @@
             this.txtProvinceLoyalty.Location = new System.Drawing.Point(776, 403);
             this.txtProvinceLoyalty.Name = "txtProvinceLoyalty";
             this.txtProvinceLoyalty.Size = new System.Drawing.Size(100, 20);
-            this.txtProvinceLoyalty.TabIndex = 37;
+            this.txtProvinceLoyalty.TabIndex = 5;
             // 
             // lblProvinceLoyalty
             // 
@@ -465,7 +479,7 @@
             this.txtProvinceOwner.Location = new System.Drawing.Point(662, 403);
             this.txtProvinceOwner.Name = "txtProvinceOwner";
             this.txtProvinceOwner.Size = new System.Drawing.Size(100, 20);
-            this.txtProvinceOwner.TabIndex = 31;
+            this.txtProvinceOwner.TabIndex = 4;
             // 
             // lblProvinceTerrain
             // 
@@ -480,7 +494,7 @@
             this.btnDeleteProvince.Location = new System.Drawing.Point(196, 443);
             this.btnDeleteProvince.Name = "btnDeleteProvince";
             this.btnDeleteProvince.Size = new System.Drawing.Size(90, 35);
-            this.btnDeleteProvince.TabIndex = 29;
+            this.btnDeleteProvince.TabIndex = 10;
             this.btnDeleteProvince.Text = "Delete Province";
             this.btnDeleteProvince.UseVisualStyleBackColor = true;
             this.btnDeleteProvince.Click += new System.EventHandler(this.btnAdminButton_Click);
@@ -490,7 +504,7 @@
             this.btnUpdateProvince.Location = new System.Drawing.Point(101, 443);
             this.btnUpdateProvince.Name = "btnUpdateProvince";
             this.btnUpdateProvince.Size = new System.Drawing.Size(90, 35);
-            this.btnUpdateProvince.TabIndex = 28;
+            this.btnUpdateProvince.TabIndex = 9;
             this.btnUpdateProvince.Text = "Update Province";
             this.btnUpdateProvince.UseVisualStyleBackColor = true;
             this.btnUpdateProvince.Click += new System.EventHandler(this.btnAdminButton_Click);
@@ -500,7 +514,7 @@
             this.txtProvinceSize.Location = new System.Drawing.Point(196, 403);
             this.txtProvinceSize.Name = "txtProvinceSize";
             this.txtProvinceSize.Size = new System.Drawing.Size(100, 20);
-            this.txtProvinceSize.TabIndex = 27;
+            this.txtProvinceSize.TabIndex = 1;
             // 
             // lblProvinceSize
             // 
@@ -515,7 +529,7 @@
             this.txtProvinceName.Location = new System.Drawing.Point(90, 403);
             this.txtProvinceName.Name = "txtProvinceName";
             this.txtProvinceName.Size = new System.Drawing.Size(100, 20);
-            this.txtProvinceName.TabIndex = 25;
+            this.txtProvinceName.TabIndex = 0;
             // 
             // lblProvinceName
             // 
@@ -545,7 +559,7 @@
             this.btnAddProvince.Location = new System.Drawing.Point(6, 443);
             this.btnAddProvince.Name = "btnAddProvince";
             this.btnAddProvince.Size = new System.Drawing.Size(89, 35);
-            this.btnAddProvince.TabIndex = 21;
+            this.btnAddProvince.TabIndex = 7;
             this.btnAddProvince.Text = "Add New Province";
             this.btnAddProvince.UseVisualStyleBackColor = true;
             this.btnAddProvince.Click += new System.EventHandler(this.btnAdminButton_Click);
@@ -556,7 +570,7 @@
             this.dgvProvinces.Location = new System.Drawing.Point(6, 6);
             this.dgvProvinces.Name = "dgvProvinces";
             this.dgvProvinces.Size = new System.Drawing.Size(872, 366);
-            this.dgvProvinces.TabIndex = 20;
+            this.dgvProvinces.TabIndex = 11;
             this.dgvProvinces.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DGV_CellContentClick);
             // 
             // tabHoldings
@@ -595,7 +609,7 @@
             this.txtHoldingLocaton.Location = new System.Drawing.Point(94, 404);
             this.txtHoldingLocaton.Name = "txtHoldingLocaton";
             this.txtHoldingLocaton.Size = new System.Drawing.Size(100, 20);
-            this.txtHoldingLocaton.TabIndex = 53;
+            this.txtHoldingLocaton.TabIndex = 0;
             // 
             // cbxHoldingType
             // 
@@ -603,7 +617,7 @@
             this.cbxHoldingType.Location = new System.Drawing.Point(201, 404);
             this.cbxHoldingType.Name = "cbxHoldingType";
             this.cbxHoldingType.Size = new System.Drawing.Size(100, 21);
-            this.cbxHoldingType.TabIndex = 52;
+            this.cbxHoldingType.TabIndex = 1;
             // 
             // lblHoldingOwner
             // 
@@ -618,7 +632,7 @@
             this.btnDeleteHolding.Location = new System.Drawing.Point(197, 444);
             this.btnDeleteHolding.Name = "btnDeleteHolding";
             this.btnDeleteHolding.Size = new System.Drawing.Size(90, 35);
-            this.btnDeleteHolding.TabIndex = 50;
+            this.btnDeleteHolding.TabIndex = 6;
             this.btnDeleteHolding.Text = "Delete Holding";
             this.btnDeleteHolding.UseVisualStyleBackColor = true;
             this.btnDeleteHolding.Click += new System.EventHandler(this.btnAdminButton_Click);
@@ -628,7 +642,7 @@
             this.btnUpdateHolding.Location = new System.Drawing.Point(102, 444);
             this.btnUpdateHolding.Name = "btnUpdateHolding";
             this.btnUpdateHolding.Size = new System.Drawing.Size(90, 35);
-            this.btnUpdateHolding.TabIndex = 49;
+            this.btnUpdateHolding.TabIndex = 5;
             this.btnUpdateHolding.Text = "Update Holding";
             this.btnUpdateHolding.UseVisualStyleBackColor = true;
             this.btnUpdateHolding.Click += new System.EventHandler(this.btnAdminButton_Click);
@@ -638,7 +652,7 @@
             this.txtHoldingSize.Location = new System.Drawing.Point(413, 404);
             this.txtHoldingSize.Name = "txtHoldingSize";
             this.txtHoldingSize.Size = new System.Drawing.Size(100, 20);
-            this.txtHoldingSize.TabIndex = 48;
+            this.txtHoldingSize.TabIndex = 3;
             // 
             // lblHoldingSize
             // 
@@ -653,7 +667,7 @@
             this.txtHoldingOwner.Location = new System.Drawing.Point(310, 404);
             this.txtHoldingOwner.Name = "txtHoldingOwner";
             this.txtHoldingOwner.Size = new System.Drawing.Size(100, 20);
-            this.txtHoldingOwner.TabIndex = 46;
+            this.txtHoldingOwner.TabIndex = 2;
             // 
             // lblHoldingType
             // 
@@ -683,7 +697,7 @@
             this.btnAddHolding.Location = new System.Drawing.Point(7, 444);
             this.btnAddHolding.Name = "btnAddHolding";
             this.btnAddHolding.Size = new System.Drawing.Size(89, 35);
-            this.btnAddHolding.TabIndex = 42;
+            this.btnAddHolding.TabIndex = 4;
             this.btnAddHolding.Text = "Add New Holding";
             this.btnAddHolding.UseVisualStyleBackColor = true;
             this.btnAddHolding.Click += new System.EventHandler(this.btnAdminButton_Click);
@@ -694,8 +708,19 @@
             this.dgvHoldings.Location = new System.Drawing.Point(6, 6);
             this.dgvHoldings.Name = "dgvHoldings";
             this.dgvHoldings.Size = new System.Drawing.Size(872, 366);
-            this.dgvHoldings.TabIndex = 21;
+            this.dgvHoldings.TabIndex = 7;
             this.dgvHoldings.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DGV_CellContentClick);
+            // 
+            // tabMap
+            // 
+            this.tabMap.Controls.Add(this.imageMap1);
+            this.tabMap.Location = new System.Drawing.Point(4, 22);
+            this.tabMap.Name = "tabMap";
+            this.tabMap.Padding = new System.Windows.Forms.Padding(3);
+            this.tabMap.Size = new System.Drawing.Size(972, 494);
+            this.tabMap.TabIndex = 5;
+            this.tabMap.Text = "Map";
+            this.tabMap.UseVisualStyleBackColor = true;
             // 
             // cbxTest
             // 
@@ -704,16 +729,6 @@
             this.cbxTest.Name = "cbxTest";
             this.cbxTest.Size = new System.Drawing.Size(121, 21);
             this.cbxTest.TabIndex = 5;
-            // 
-            // btnRefresh
-            // 
-            this.btnRefresh.Location = new System.Drawing.Point(7, 379);
-            this.btnRefresh.Name = "btnRefresh";
-            this.btnRefresh.Size = new System.Drawing.Size(75, 23);
-            this.btnRefresh.TabIndex = 1;
-            this.btnRefresh.Text = "Refresh";
-            this.btnRefresh.UseVisualStyleBackColor = true;
-            this.btnRefresh.Click += new System.EventHandler(this.BtnRefresh_Click);
             // 
             // ccbProvinceSecondaryTerrain
             // 
@@ -725,13 +740,23 @@
             this.ccbProvinceSecondaryTerrain.Location = new System.Drawing.Point(452, 403);
             this.ccbProvinceSecondaryTerrain.Name = "ccbProvinceSecondaryTerrain";
             this.ccbProvinceSecondaryTerrain.Size = new System.Drawing.Size(204, 21);
-            this.ccbProvinceSecondaryTerrain.TabIndex = 40;
+            this.ccbProvinceSecondaryTerrain.TabIndex = 3;
             this.ccbProvinceSecondaryTerrain.ValueSeparator = ", ";
+            // 
+            // imageMap1
+            // 
+            this.imageMap1.Image = global::Birthright.Properties.Resources.anuire;
+            this.imageMap1.Location = new System.Drawing.Point(0, 0);
+            this.imageMap1.Name = "imageMap1";
+            this.imageMap1.Size = new System.Drawing.Size(792, 494);
+            this.imageMap1.TabIndex = 1;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSize = true;
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.ClientSize = new System.Drawing.Size(1218, 544);
             this.Controls.Add(this.cbxTest);
             this.Controls.Add(this.tabControl1);
@@ -755,6 +780,7 @@
             this.tabHoldings.ResumeLayout(false);
             this.tabHoldings.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvHoldings)).EndInit();
+            this.tabMap.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -828,6 +854,8 @@
         private System.Windows.Forms.Label lblHoldingLocation;
         private System.Windows.Forms.TextBox txtHoldingLocaton;
         private System.Windows.Forms.Button btnRefresh;
+        private System.Windows.Forms.TabPage tabMap;
+        private ImageMap imageMap1;
     }
 }
 

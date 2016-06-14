@@ -106,27 +106,33 @@ namespace Birthright
             GameInfo.RealmIdToNameBiDictionary.Clear();
             GameInfo.ProvinceIdToNameBiDictionary.Clear();
             GameInfo.RealmIdVsRulerAbbrBiDictionary.Clear();
-            
 
-            foreach (KeyValuePair<int, string> pair in rulerNameDictionary)
+            try
             {
-                GameInfo.RulerIdToNameBiDictionary.Add(pair.Key, pair.Value);
+                foreach (KeyValuePair<int, string> pair in rulerNameDictionary)
+                {
+                    GameInfo.RulerIdToNameBiDictionary.Add(pair.Key, pair.Value);
+                }
+                foreach (KeyValuePair<int, string> pair in realmNameDictionary)
+                {
+                    GameInfo.RealmIdToNameBiDictionary.Add(pair.Key, pair.Value);
+                }
+                foreach (KeyValuePair<int, string> pair in provinceNameDictionary)
+                {
+                    GameInfo.ProvinceIdToNameBiDictionary.Add(pair.Key, pair.Value);
+                }
+                foreach (KeyValuePair<int, string> pair in rulerAbbreviationDictionary)
+                {
+                    GameInfo.RulerIdToAbbrBiDictionary.Add(pair.Key, pair.Value);
+                }
+                foreach (KeyValuePair<int, string> pair in realmIdVsRulerAbbr)
+                {
+                    GameInfo.RealmIdVsRulerAbbrBiDictionary.Add(pair.Key, pair.Value);
+                }
             }
-            foreach (KeyValuePair<int, string> pair in realmNameDictionary)
+            catch (Exception e)
             {
-                GameInfo.RealmIdToNameBiDictionary.Add(pair.Key, pair.Value);
-            }
-            foreach (KeyValuePair<int, string> pair in provinceNameDictionary)
-            {
-                GameInfo.ProvinceIdToNameBiDictionary.Add(pair.Key, pair.Value);
-            }
-            foreach (KeyValuePair<int, string> pair in rulerAbbreviationDictionary)
-            {
-                GameInfo.RulerIdToAbbrBiDictionary.Add(pair.Key, pair.Value);
-            }
-            foreach (KeyValuePair<int, string> pair in realmIdVsRulerAbbr)
-            {
-                GameInfo.RealmIdVsRulerAbbrBiDictionary.Add(pair.Key, pair.Value);
+                MessageBox.Show(e.Message);
             }
         }
 
